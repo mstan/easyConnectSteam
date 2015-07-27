@@ -1,0 +1,17 @@
+{
+  "name": "easy_connect_steam",
+  "version": "1.0.0",
+  "description": "Easy Steam Connect Link",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Matt Stanley",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.13.2",
+    "bower": "^1.4.1",
+    "ejs": "^2.3.3",
+    "express": "^4.13.1"
+  }
+}
