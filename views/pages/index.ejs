@@ -22,7 +22,9 @@
 
             <% if(output != null) { %>
 
-            	<a href="<%= output %>"><%= output %> </a>
+            	<a href="<%= output %>"><%= output %> </a> <br>
+
+            	Permalink: <a href="http://localhost:3000/go?unique_key=<%= permalink %>">localhost:3000/go?unique_key=<%= permalink %></a>
 
             <% } %>
 

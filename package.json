@@ -12,6 +12,8 @@
     "body-parser": "^1.13.2",
     "bower": "^1.4.1",
     "ejs": "^2.3.3",
-    "express": "^4.13.1"
+    "express": "^4.13.1",
+    "randomstring": "^1.0.7",
+    "sqlite3": "^3.0.9"
   }
 }

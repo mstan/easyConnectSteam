@@ -1,0 +1,1 @@
+CREATE TABLE "links" ("id" INTEGER PRIMARY KEY  NOT NULL ,"ip" VARCHAR NOT NULL ,"port" VARCHAR NOT NULL  DEFAULT (27015) ,"password" VARCHAR,"unique_key" VARCHAR DEFAULT (null) , "created_on" INTEGER)
