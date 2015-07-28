@@ -7,14 +7,18 @@
 
 <body>
 
-        <div class="page-header">
+        <div class="page-header" align="center">
           <h1>Here's your link!</h1>
         </div><!-- /page-header -->
 
     <div class="jumbotron">
       <div class="container" align="center">
 
-            <a href="<%= output %>"><%= output %> </a>
+            <br><button class="btn btn-default" href="<% output%>">Click to connect!</button>
+            <br>
+            <br><a href="<%= output %>"><%= output %> </a>
+            <br>
+            <br>Direct Connect Link: <a href="localhost:3000/direct?uniqueKey=<%= uniqueKey %>">localhost:3000/direct?uniqueKey=<%= uniqueKey %></a>
 
       </div><!-- /container -->
     </div><!-- /junbotron -->
