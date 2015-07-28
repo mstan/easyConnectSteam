@@ -1,35 +1,41 @@
 <!DOCTYPE HTML>
 <html>
 <header>
-	<title> Steam URL Parser </title>
-		<%- include('../partials/navbar.ejs') %>
+  <title> Steam URL Parser </title>
+    <%- include('../partials/navbar.ejs') %>
 </header>
 
 <body>
 
-				<div class="page-header">
-					<h1>Link Parser</h1>
-				</div><!-- /page-header -->
+        <div class="page-header">
+          <h1>Link Parser</h1>
+        </div><!-- /page-header -->
 
-		<div class="jumbotron">
-			<div class="container" align="center">
-            <form action="/" method="post" id="server_info">
+    <div class="jumbotron">
+      <div class="container" align="center">
+              <form action="/" method="post" id="server_info">
 
                 <br>IP <input type="text" name="ip" placeholder="12.34.56.78:27015"></input>; password <input type="text" name="password"></input>
                 <br>
                 <br><button>Let's go!</button>
-            </form><!-- /server_info -->	
+              </form><!-- /server_info -->	
 
-            <% if(output != null) { %>
+              <% if(output != null) { %>
 
             	<a href="<%= output %>"><%= output %> </a> <br>
 
-            	Permalink: <a href="http://localhost:3000/go?unique_key=<%= permalink %>">localhost:3000/go?unique_key=<%= permalink %></a>
+              Permalink: <a href="http://localhost:3000/go?uniqueKey=<%= permalink %>">localhost:3000/go?uniqueKey=<%= permalink %></a>
 
             <% } %>
 
-			</div><!-- /container -->
-		</div><!-- /junbotron -->
+            <% if(msg != null) { %>
+
+            <%= msg %>
+
+            <% } %>
+
+      </div><!-- /container -->
+    </div><!-- /junbotron -->
 
 
 </body>

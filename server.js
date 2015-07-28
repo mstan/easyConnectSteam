@@ -5,6 +5,7 @@ var ejs = require('ejs');
 var bodyparser = require('body-parser');
 var sqlite3 = require('sqlite3');
 var randomstring = require("randomstring");
+var validator = require('validator');
 
 //Let's start Express
 var app = express();
@@ -26,52 +27,75 @@ var db = new sqlite3.Database(db_file);
 
 //GET index
 app.get('/', function (req,res) {
-	res.render('pages/index', {output: null});
+  var msg = req.query.msg || null;
+
+
+	res.render('pages/index', {output: null, msg: msg});
 });
 
 //Accept index info
 app.post('/', function (req,res) {
 
 //User Defined Vars
-	var ip_parts = req.body.ip.split(":");
-	var password = req.body.password;	
+  var ipParts = req.body.ip.split(":");
+  var password = req.body.password;	
 
-	//ip_parts[0] is always base IP
-	//ip_parts [1] is port if provided. Otherwise 27015	
-	var ip = ip_parts[0];
-	var port = ip_parts[1] || 27015;
+console.log( validator.isIP(ipParts, 4) );
+
+//Was that IP REALLY an IP?
+if ( !validator.isIP(ipParts[0], 4) ) {
+	res.redirect('/?msg=Invalid%20IP%20address!');
+	return;
+}  
+
+  //ipParts[0] is always base IP
+  //ipParts [1] is port if provided. Otherwise 27015	
+  var ip = ipParts[0];
+  var port = ipParts[1] || 27015;
 
 //Server Defined Vars
-	var created_on = new Date().getTime() / 1000 >> 0; //in ms. convert to s. bit shift to drop float val.
-	var unique_key = randomstring.generate(7);
+  var createdOn = new Date().getTime() / 1000 >> 0; //in ms. convert to s. bit shift to drop float val.
+  var uniqueKey = randomstring.generate(7);
 
-	var pass_to_db = [ip, port, password, unique_key, created_on];
+  var pass_to_db = [ip, port, password, uniqueKey, createdOn];
 
-	db.run("INSERT INTO links (ip,port,password,unique_key,created_on) VALUES(?,?,?,?,?)", pass_to_db, function (err) {
+  db.run("INSERT INTO links (ip,port,password,uniqueKey,createdOn) VALUES(?,?,?,?,?)", pass_to_db, function (err) {
 
-		var full_link_out = "steam://connect/" + ip + ":" + port + "/" + password;
+    var fullLink = "steam://connect/" + ip + ":" + port + "/" + password;
 
-		res.render('pages/index', {output: full_link_out, permalink: unique_key});
-	});
+    res.render('pages/index', {output: fullLink, permalink: uniqueKey, msg: null});
+  });
 });
 
 //GET "my link" by token
 app.get('/go', function (req,res) {
-	//Assign key from query
-	var unique_key = req.query.unique_key;
+  //Assign key from query
+  var uniqueKey = req.query.uniqueKey;
 
-	//Look it up in the db
-	db.get('SELECT * FROM links WHERE unique_key = ?', unique_key, function (err, row) {
-		//Does it exist?
-		if(!row) { 
-			res.send("Entry not found");
-		} else {
-		//It does? Let's give them their link back.
-			var full_link_out = "steam://connect/" + row.ip + ":" + row.port + "/" + row.password;
+  //Look it up in the db
+  db.get('SELECT * FROM links WHERE uniqueKey = ?', uniqueKey, function (err, row) {
+    //Does it exist?
+    if(!row) { 
+      res.send("Entry not found");
+      } else {
+      //It does? Let's give them their link back.
+      var fullLink = "steam://connect/" + row.ip + ":" + row.port + "/" + row.password;
 
-			res.render('pages/go', {output: full_link_out});
-	}
-	});
+      res.render('pages/go', {output: fullLink});
+  }
+  });
 });
+
+
+
+
+
+//test func for db output
+app.get('/db', function (req,res) {
+    db.all('SELECT * FROM links', function (err, rows) {
+        res.render('pages/db', { entries: rows });
+    });
+});
+
 
 app.listen(3000);
