@@ -1,0 +1,20 @@
+{
+  "name": "easy_connect_steam",
+  "version": "1.0.0",
+  "homepage": "https://github.com/mstan/easy_connect_steam",
+  "authors": [
+    "mattsgm <1379tech@gmail.com>"
+  ],
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "bootstrap": "~3.3.5"
+  }
+}
