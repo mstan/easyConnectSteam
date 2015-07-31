@@ -7,15 +7,14 @@ var sqlite3 = require('sqlite3');
 var randomstring = require("randomstring");
 var validator = require('validator');
 
-//My deps
+//Declare my deps
 var directPass = require('./lib/direct.js');
 var parserSteam = require('./lib/parser.js');
 var getInfo = require('./lib/retrieve.js');
+var serveIndex = require('./lib/index.js');
+
 //Let's start Express
 var app = express();
-
-//Let's body parse our document
-app.use(bodyparser.urlencoded({extended: false}));
 
 //Set View Engine
 app.set('view engine', 'ejs');
@@ -28,21 +27,29 @@ app.use(express.static(__dirname + '/views'));
 dbFile = "./db/db.sqlite";
 var db = new sqlite3.Database(dbFile);
 
-//Middleware. Bind database to requests
-app.get(function (req,res,next) {
+//Middleware
+app.use(bodyparser.urlencoded({extended: false}));
+
+//For deps to hook reqs
+app.use(function (req,res,next) {
   req.db = db;
+  req.validator = validator;
+  req.randomstring = randomstring;
   next();
 });
 
 
 //GET index
-app.get('/', getInfo);
+app.get('/', serveIndex);
 
-//Given the unique key, immediately redirect user to the steam:// protocol. This allows you to hide your information when giving it to others.
-app.get('/direct', directPass);
+//GET "my link" by token
+app.get('/go', getInfo);
 
 //Accept index info
 app.post('/', parserSteam);
+
+//Pass directly to end user without them seeing info
+app.get('/direct', directPass);
 
 
 //Start on port 3000
