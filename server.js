@@ -4,14 +4,14 @@ var express = require('express');
 var ejs = require('ejs');
 var bodyparser = require('body-parser');
 var sqlite3 = require('sqlite3');
-var randomstring = require("randomstring");
-var validator = require('validator');
 
 //Declare my deps
 var directPass = require('./lib/direct.js');
 var parserSteam = require('./lib/parser.js');
 var getInfo = require('./lib/retrieve.js');
 var serveIndex = require('./lib/index.js');
+var deleteEntry = require('./lib/delete.js');
+var viewEntries = require('./lib/viewEntries.js');
 
 //Let's start Express
 var app = express();
@@ -33,8 +33,6 @@ app.use(bodyparser.urlencoded({extended: false}));
 //For deps to hook reqs
 app.use(function (req,res,next) {
   req.db = db;
-  req.validator = validator;
-  req.randomstring = randomstring;
   next();
 });
 
@@ -51,6 +49,11 @@ app.post('/', parserSteam);
 //Pass directly to end user without them seeing info
 app.get('/direct', directPass);
 
+//View all results based on criteria of who created it
+app.all('/myLinks', viewEntries);
+
+//Remove entry from db
+app.all('/delete', deleteEntry);
 
 //Start on port 3000
 app.listen(3000);

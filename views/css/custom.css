@@ -1,2 +1,22 @@
-body { padding-top: 70px; }
+body { 
+	padding-top: 70px;
+ }
 
+@font-face {
+	font-family: "TF2 Build";
+	src: url("../fonts/tf2build.ttf");
+}
+.page-header {
+    font-family: "TF2 Build","Helvetica Neue",Helvetica,Arial,sans-serif;
+}
+.navbar-brand {
+  float: left;
+  height: 50px;
+  padding: 15px 15px;
+  font-size: 18px;
+  line-height: 20px;
+  font-family: "TF2 Build","Helvetica Neue",Helvetica,Arial,sans-serif;
+}
+.jumbotron {
+  background-color: rgb(212,201,176);  
+}

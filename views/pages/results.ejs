@@ -1,0 +1,29 @@
+<!DOCTYPE HTML>
+<html>
+<header>
+  <title> Steam URL Parser </title>
+    <%- include('../partials/navbar.ejs') %>
+</header>
+
+<body>
+
+  <div class="page-header" align="center">
+     <h1>Link Parser</h1>
+  </div><!-- /page-header -->
+
+  <div class="container" align="center">
+
+    <% if (results == undefined) { %>
+      No entries yet!
+    <% } else { %>
+      <% results.forEach(function(result) { %>
+        <%= result.ip %>,
+        <a href="/go?uniqueKey=<%= result.uniqueKey %>">View</a>,
+        <a href="/delete?uniqueKey=<%= result.uniqueKey %>">Delete</a> <br>, 
+      <% }); %>
+    <% } %>
+
+  </div><!-- /container -->
+
+</body>
+</html>
