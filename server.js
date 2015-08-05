@@ -114,7 +114,7 @@ app.all('/delete', deleteEntry);
 passport.use(new SteamStrategy({
     returnURL: 'http://localhost:3000/auth/steam/return',
     realm: 'http://localhost:3000/',
-    apiKey: '64287B031DDF856AC279B292DB6187C1'
+    apiKey: '<TOKEN>'
   },
   function (identifier, profile, done) {
     // asynchronous verification, for effect...

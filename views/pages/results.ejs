@@ -13,13 +13,13 @@
 
   <div class="container" align="center">
 
-    <% if (results == undefined) { %>
+    <% if (results.length === 0) { %>
       No entries yet!
     <% } else { %>
       <% results.forEach(function(result) { %>
         <%= result.ip %>,
         <a href="/go?uniqueKey=<%= result.uniqueKey %>">View</a>,
-        <a href="/delete?uniqueKey=<%= result.uniqueKey %>">Delete</a> <br>, 
+        <a href="/delete?uniqueKey=<%= result.uniqueKey %>">Delete</a> <br> 
       <% }); %>
     <% } %>
 
