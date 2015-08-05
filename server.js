@@ -1,4 +1,9 @@
-//Packages & Deps
+/* 
+  Packages & Deps
+*/
+
+
+  //Modules
 var path = require('path');
 var express = require('express');
 var ejs = require('ejs');
@@ -8,10 +13,11 @@ var passport = require('passport');
 var cookieParser = require('cookie-parser');
 var session = require('express-session');
 
-//Passport
-var SteamStrategy = require('./node_modules/passport-steam/lib/passport-steam').Strategy
+  //Passport
 
-//Declare my deps
+var steamStrategyConfiguration = require('./lib/steamStrategy'); //listed under .gitignore due to sensitive access token.
+
+  //Declare my deps
 var directPass = require('./lib/direct.js');
 var parserSteam = require('./lib/parser.js');
 var getInfo = require('./lib/retrieve.js');
@@ -34,16 +40,16 @@ app.use(express.static(__dirname + '/views'));
 dbFile = "./db/db.sqlite";
 var db = new sqlite3.Database(dbFile);
 
-//Middleware
+/* 
+  Middleware 
+*/
 
   //For deps to hook reqs
 app.use(function (req,res,next) {
   req.db = db;
   next();
 });
-  
-
-
+ 
   //Misc
 app.use(session({secret: 'secret token', resave: true, saveUninitialized: true}));
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -72,22 +78,7 @@ app.use(function (req,res,next) {
 
 
 //Routing
-  //Passport
 
-  //Middleware for Steam auth
-app.get('/auth/steam',
-  passport.authenticate('steam'),
-  function (req, res) {
-    // The request will be redirected to Steam for authentication, so
-    // this function will not be called.
-  });
-
-app.get('/auth/steam/return',
-  passport.authenticate('steam', { failureRedirect: '/', msg: 'login failed' }),
-  function (req, res) {
-    // Successful authentication, redirect home.
-    res.redirect('/?msg=Logged%20in!');
-  });
 
 //GET index
 app.get('/', serveIndex);
@@ -108,24 +99,26 @@ app.all('/myLinks', authCheck, viewEntries);
 app.all('/delete', deleteEntry);
 
 
+  //Passport
+
+  //Middleware for Steam auth
+app.get('/auth/steam',
+  passport.authenticate('steam'),
+  function (req, res) {
+    // The request will be redirected to Steam for authentication, so
+    // this function will not be called.
+  });
+
+app.get('/auth/steam/return',
+  passport.authenticate('steam', { failureRedirect: '/', msg: 'login failed' }),
+  function (req, res) {
+    // Successful authentication, redirect home.
+    res.redirect('/?msg=Logged%20in!');
+  });
 
 
-  //Passpot strategies
-passport.use(new SteamStrategy({
-    returnURL: 'http://localhost:3000/auth/steam/return',
-    realm: 'http://localhost:3000/',
-    apiKey: '<TOKEN>'
-  },
-  function (identifier, profile, done) {
-    // asynchronous verification, for effect...
-    process.nextTick(function () {
-
-
-      profile.id = profile._json.steamid;
-      return done(null, profile);
-    });
-  }
-));
+  //Passpot strategies & configuration
+passport.use(steamStrategyConfiguration);
 
 passport.serializeUser(function (user, done) {
   done(null, user);

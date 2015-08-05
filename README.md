@@ -5,4 +5,5 @@ To Install:
 2. run npm install  
 3. create DB under db/db.sqlite using database create table function under /sql  
 4. run bower install  
-5. npm start  
+5. Setup a passport-steam strategy configuration file. (Sample will work, but you must provide own steam API token key. You can get one at http://steamcommunity.com/dev/apikey )
+6. npm start  

@@ -2,3 +2,4 @@
 /bower_components/
 /db/
 /views/pages/db.ejs
+/lib/steamStrategy.js
