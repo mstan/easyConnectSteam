@@ -60,14 +60,14 @@ app.use(session({secret: 'secret token', resave: true, saveUninitialized: true})
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser('super secret token'));
 app.use(passport.initialize());
-app.use(passport.session()); //Q: User not defined when session handler is trying to be used
+app.use(passport.session());
 
   //TEST: Built to identify token consistency and when a user is defined or not
 app.use(function (req,res, next) {
-  var passedUser = req.user || 'undefined user';
+  res.locals.user = req.user;
 
-  //console.log('This page was loaded as: ');
-  //console.log(passedUser);
+  console.log('This page was loaded as: ');
+  console.log(res.locals.user);
   next();
 });
 
@@ -139,7 +139,7 @@ app.get('/direct', directPass);
 app.all('/myLinks', authCheck, viewEntries);
 
 //Remove entry from db
-app.all('/delete', deleteEntry);
+app.all('/delete', authCheck, deleteEntry);
 
 
 //Start on port 3000
