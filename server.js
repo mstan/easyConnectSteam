@@ -27,6 +27,10 @@ var viewEntries = require('./lib/viewEntries.js');
 var authCheck = require('./lib/authCheck.js');
 var updateEntry = require('./lib/updateEntry.js');
 
+//Global declaration of var for cross-module use
+global.sqlBlacklist = '{}();';
+
+
 //Let's start Express
 var app = express();
 
@@ -74,9 +78,13 @@ app.use(function (req,res,next) {
       authStatus = 1;
     }
   console.log('User authentication status is: ' + authStatus);
-  res.locals.user = authStatus;
+  global.authStatus = authStatus;
   next();
 });
+
+/* 
+  Passport & User Auth
+*/
 
   //Passport
 
@@ -107,8 +115,10 @@ passport.deserializeUser(function (user, done) {
   done(null, user);
 });
 
-//Routing
 
+/* 
+  Routing
+*/
 
 //GET index
 app.get('/', serveIndex);
@@ -117,11 +127,10 @@ app.get('/', serveIndex);
 app.post('/', authCheck, parserSteam);
 
 //GET "my link" by token
-app.get('/go', getInfo);
+app.get('/go', authCheck, getInfo);
 
 //GET "my link" by token
 app.post('/update', updateEntry); // end app.get
-
 
 //Pass directly to end user without them seeing info
 app.get('/direct', directPass);
@@ -131,6 +140,7 @@ app.all('/myLinks', authCheck, viewEntries);
 
 //Remove entry from db
 app.all('/delete', deleteEntry);
+
 
 //Start on port 3000
 app.listen(3000);
