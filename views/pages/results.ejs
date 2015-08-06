@@ -8,7 +8,7 @@
 <body>
 
   <div class="page-header" align="center">
-     <h1>Link Parser</h1>
+     <h1>My Servers</h1>
   </div><!-- /page-header -->
 
   <div class="container" align="center">
@@ -17,7 +17,7 @@
       No entries yet!
     <% } else { %>
       <% results.forEach(function(result) { %>
-        <%= result.ip %>,
+        <%= result.serverName %> - <%= result.ip %>:<%= result.port %>,
         <a href="/go?uniqueKey=<%= result.uniqueKey %>">View</a>,
         <a href="/delete?uniqueKey=<%= result.uniqueKey %>">Delete</a> <br> 
       <% }); %>

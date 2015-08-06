@@ -25,6 +25,7 @@ var serveIndex = require('./lib/index.js');
 var deleteEntry = require('./lib/delete.js');
 var viewEntries = require('./lib/viewEntries.js');
 var authCheck = require('./lib/authCheck.js');
+var updateEntry = require('./lib/updateEntry.js');
 
 //Let's start Express
 var app = express();
@@ -61,8 +62,8 @@ app.use(passport.session()); //Q: User not defined when session handler is tryin
 app.use(function (req,res, next) {
   var passedUser = req.user || 'undefined user';
 
-  console.log('This page was loaded as: ');
-  console.log(passedUser);
+  //console.log('This page was loaded as: ');
+  //console.log(passedUser);
   next();
 });
 
@@ -83,11 +84,15 @@ app.use(function (req,res,next) {
 //GET index
 app.get('/', serveIndex);
 
+//Accept index info
+app.post('/', authCheck, parserSteam);
+
 //GET "my link" by token
 app.get('/go', getInfo);
 
-//Accept index info
-app.post('/', authCheck, parserSteam);
+//GET "my link" by token
+app.post('/update', updateEntry); // end app.get
+
 
 //Pass directly to end user without them seeing info
 app.get('/direct', directPass);

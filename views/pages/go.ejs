@@ -14,6 +14,20 @@
     <div class="jumbotron">
       <div class="container" align="center">
 
+              <form action="/update" method="post" id="updateInfo">
+                Server Name: <input type="text" name="serverName" value="<%= row.serverName %>"></input> <br>
+                Identifier: <input type="text" name="uniqueKey" value="<%= row.uniqueKey %>" readOnly >
+                Creator: <input type="text" name="creator" value="<%= row.creator %>" readOnly >
+
+                <br>
+                <br>IP <input type="text" name="ip" value="<%= row.ip %>"></input>; password <input type="text" name="password" value="<%= row.password %>"></input>
+                <br>
+                <br> </input>
+                <br><button class="btn btn-default">Update</button>
+              </form><!-- /updateInfo -->  
+
+              <hr>
+
             <br><button class="btn btn-default" href="<% output%>">Click to connect!</button>
             <br>
             <br><a href="<%= output %>"><%= output %> </a>
