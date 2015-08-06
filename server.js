@@ -74,35 +74,9 @@ app.use(function (req,res,next) {
       authStatus = 1;
     }
   console.log('User authentication status is: ' + authStatus);
+  res.locals.user = authStatus;
   next();
 });
-
-
-//Routing
-
-
-//GET index
-app.get('/', serveIndex);
-
-//Accept index info
-app.post('/', authCheck, parserSteam);
-
-//GET "my link" by token
-app.get('/go', getInfo);
-
-//GET "my link" by token
-app.post('/update', updateEntry); // end app.get
-
-
-//Pass directly to end user without them seeing info
-app.get('/direct', directPass);
-
-//View all results based on criteria of who created it
-app.all('/myLinks', authCheck, viewEntries);
-
-//Remove entry from db
-app.all('/delete', deleteEntry);
-
 
   //Passport
 
@@ -132,6 +106,31 @@ passport.serializeUser(function (user, done) {
 passport.deserializeUser(function (user, done) {
   done(null, user);
 });
+
+//Routing
+
+
+//GET index
+app.get('/', serveIndex);
+
+//Accept index info
+app.post('/', authCheck, parserSteam);
+
+//GET "my link" by token
+app.get('/go', getInfo);
+
+//GET "my link" by token
+app.post('/update', updateEntry); // end app.get
+
+
+//Pass directly to end user without them seeing info
+app.get('/direct', directPass);
+
+//View all results based on criteria of who created it
+app.all('/myLinks', authCheck, viewEntries);
+
+//Remove entry from db
+app.all('/delete', deleteEntry);
 
 //Start on port 3000
 app.listen(3000);
