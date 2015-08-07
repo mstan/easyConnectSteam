@@ -33,9 +33,10 @@
   </div><!-- /container-fluid -->
 </nav>
 
+<!-- USER IDENTIFIED -->
 <% } else { %>
 
-<!-- USER IDENTIFIED -->
+
 <!-- Navbar -->
 
 <nav class="navbar navbar-default navbar-fixed-top">
@@ -52,7 +53,10 @@
       </ul>
 
 
-    <p class="navbar-text navbar-right"><img src="<%= user._json.avatar%>" /> <%= user._json.personaname %></a></p>     
+    <p class="navbar-text navbar-right"><img src="<%= user._json.avatar%>" /> <%= user._json.personaname %>
+    <a href='/logout'>Log Out</a>
+    </p>  
+   
     </div><!-- /.navbar-collapse -->
 
 

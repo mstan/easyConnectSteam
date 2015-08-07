@@ -1,6 +1,6 @@
-/* 
-  Packages & Deps
-*/
+/******************* 
+* Packages & Deps  *
+*******************/
 
 
   //Modules
@@ -26,6 +26,9 @@ var deleteEntry = require('./lib/delete.js');
 var viewEntries = require('./lib/viewEntries.js');
 var authCheck = require('./lib/authCheck.js');
 var updateEntry = require('./lib/updateEntry.js');
+var logout = require('./lib/logout.js');
+var authStatus = require('./lib/authStatus.js');
+var globalTokens = require('./lib/globalTokens.js');
 
 //Global declaration of var for cross-module use
 global.sqlBlacklist = '{}();';
@@ -45,9 +48,9 @@ app.use(express.static(__dirname + '/views'));
 dbFile = "./db/db.sqlite";
 var db = new sqlite3.Database(dbFile);
 
-/* 
-  Middleware 
-*/
+/******************* 
+*    Middleware    *
+*******************/
 
   //For deps to hook reqs
 app.use(function (req,res,next) {
@@ -62,46 +65,30 @@ app.use(cookieParser('super secret token'));
 app.use(passport.initialize());
 app.use(passport.session());
 
-  //TEST: Built to identify token consistency and when a user is defined or not
-app.use(function (req,res, next) {
-  res.locals.user = req.user;
-
-  console.log('This page was loaded as: ');
-  console.log(res.locals.user);
-  next();
-});
+  //Global tokens to pass to our end user by res.locals
+app.use(globalTokens);
 
   //userAuth boolean
-app.use(function (req,res,next) {
-  var authStatus = 0;
-    if(req.user) {
-      authStatus = 1;
-    }
-  console.log('User authentication status is: ' + authStatus);
-  global.authStatus = authStatus;
-  next();
-});
+app.use(authStatus);
 
-/* 
-  Passport & User Auth
-*/
+/******************* 
+*  Passport & Auth *
+*******************/
 
   //Passport
 
-  //Middleware for Steam auth
+  //Middleware for Steam auth  
 app.get('/auth/steam',
-  passport.authenticate('steam'),
-  function (req, res) {
-    // The request will be redirected to Steam for authentication, so
-    // this function will not be called.
-  });
+  passport.authenticate('steam')); //No function is passed here. passport.auth takes care of it.
 
 app.get('/auth/steam/return',
-  passport.authenticate('steam', { failureRedirect: '/', msg: 'login failed' }),
+  passport.authenticate('steam', { failureRedirect: '/?msg=Login%20Failed' }),
   function (req, res) {
     // Successful authentication, redirect home.
-    res.redirect('/?msg=Logged%20in!');
+    res.redirect('/?msg=Logged%20in!&msgStatus=3');
   });
+ 
+app.get('/logout', logout);
 
 
   //Passpot strategies & configuration
@@ -116,9 +103,9 @@ passport.deserializeUser(function (user, done) {
 });
 
 
-/* 
-  Routing
-*/
+/******************* 
+*    Routing       *
+*******************/
 
 //GET index
 app.get('/', serveIndex);
