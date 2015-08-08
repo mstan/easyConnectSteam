@@ -27,7 +27,6 @@ var viewEntries = require('./lib/viewEntries.js');
 var authCheck = require('./lib/authCheck.js');
 var updateEntry = require('./lib/updateEntry.js');
 var logout = require('./lib/logout.js');
-var authStatus = require('./lib/authStatus.js');
 var globalTokens = require('./lib/globalTokens.js');
 
 //Global declaration of var for cross-module use
@@ -68,8 +67,7 @@ app.use(passport.session());
   //Global tokens to pass to our end user by res.locals
 app.use(globalTokens);
 
-  //userAuth boolean
-app.use(authStatus);
+
 
 /******************* 
 *  Passport & Auth *
